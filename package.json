@@ -1,0 +1,14 @@
+{
+  "name": "lt-audio-sheets",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Shared, framework-agnostic spec/sales sheet render engine + adapter for Latin Trading Audio (ACC + dealer catalog).",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./adapter": "./adapter.js",
+    "./product-sheets": "./product-sheets.js"
+  },
+  "scripts": { "test": "node --test" },
+  "license": "UNLICENSED"
+}
