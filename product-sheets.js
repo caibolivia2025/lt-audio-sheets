@@ -162,6 +162,42 @@ export function applySpecDoc(data, docData) {
   return d;
 }
 
+/* Default sales-sheet editorial doc — the blank template the ACC Fichas editor
+ * seeds from and a saved product_sheets `data` (kind='sales') overlays onto.
+ * Verbatim from the ACC inline helper (was index.html blankEditorial). */
+export function blankEditorial() {
+  return {
+    headline: '', headlineEm: '', subhead: '',
+    featuresEyebrow: 'Por qué se vende', featuresTitle: '', featuresTitleEm: '', featuresAside: '',
+    features: [], stats: [], bar: [],
+    pitchEyebrow: 'El argumento', pitchHeadline: '', pitchHeadlineEm: '', pitchBody: '', pitchSignoff: '',
+    boxTitle: '', box: [], brandMode: 'extended', lifestyleImg: '', seriesLogo: '',
+  };
+}
+
+/* Apply a saved sales doc's editorial layer (flat `ed` shape — the product_sheets
+ * `data` jsonb) onto a canonical object from productToSheetData. Returns a new
+ * object: maps the flat editorial fields into d.editorial (+ d.meta.brandMode) so
+ * renderSalesSheet consumes them. The per-dealer PRICE stays live in d.price (set
+ * by the adapter via RLS) and is NEVER part of the doc. Verbatim relocation of the
+ * ACC inline withEditorial helper, with `ed` derived from docData here so both ACC
+ * and the catalog render the same sheet. */
+export function applySalesDoc(data, docData) {
+  if (!data) return data;
+  var ed = Object.assign(blankEditorial(), docData || {});
+  var d = Object.assign({}, data);
+  d.meta = Object.assign({}, data.meta, { brandMode: ed.brandMode || 'extended' });
+  d.editorial = Object.assign({}, data.editorial, {
+    headline: ed.headline, headlineEm: ed.headlineEm, subhead: ed.subhead,
+    featuresEyebrow: ed.featuresEyebrow, featuresTitle: ed.featuresTitle, featuresTitleEm: ed.featuresTitleEm, featuresAside: ed.featuresAside,
+    features: ed.features, stats: ed.stats, bar: ed.bar,
+    pitch: { eyebrow: ed.pitchEyebrow, headline: ed.pitchHeadline, headlineEm: ed.pitchHeadlineEm, body: ed.pitchBody, signoff: ed.pitchSignoff },
+    boxTitle: ed.boxTitle, box: ed.box,
+    lifestyleImg: ed.lifestyleImg, seriesLogo: ed.seriesLogo,
+  });
+  return d;
+}
+
 /* ===================== canonical -> generator `state` ===================== */
 function nz(v) { return v == null ? '' : String(v); }
 

@@ -5,4 +5,5 @@ export {
   renderSpecSheet, renderSalesSheet,
   injectSheetStyles, hydrateBarcodes,
   mergeCustom, applySpecDoc,
+  blankEditorial, applySalesDoc,
 } from './product-sheets.js';
